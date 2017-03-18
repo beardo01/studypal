@@ -14,14 +14,14 @@ class User(models.Model):
 	email = models.EmailField()
 	phone = models.CharField(max_length=25, default=None)
 	password = models.CharField()
-	groups = models.ManyToManyField(Group)
+	groups = models.ManyToManyField('Group')
 
 class Group(models.Model):
 	# ID is automatically created
 	name = models.CharField(max_length=50)
 	privacy = models.PositiveSmallIntegerField()
 	description = models.TextField(default=None)
-	members = models.ManyToManyField(User)
+	members = models.ManyToManyField('User')
 
 class Chat(models.Model):
 	# ID is automatically created
@@ -32,21 +32,21 @@ class Chat(models.Model):
 
 class Message(models.Model):
 	# ID is automatically generated
-	chat_id = models.ForeignKey(Chat)
-	author = models.ForeignKey(User)
+	chat_id = models.ForeignKey('Chat')
+	author = models.ForeignKey('User')
 	create_date = models.DateTimeField(default=datetime.now)
 	content = models.TextField()
 
 	# Pinning system
 	important = models.BooleanField(default=False)
 	solved = models.BooleanField(default=False)
-	replies = models.ManyToManyField(Reply)
-	answer = models.ForeignKey(Reply)
+	replies = models.ManyToManyField('Reply')
+	answer = models.ForeignKey('Reply')
 
 class Reply(models.Model):
 	# ID is automatically generated
-	message_id = models.ForeignKey(Message)
-	author = models.ForeignKey(User)
+	message_id = models.ForeignKey('Message')
+	author = models.ForeignKey('User')
 	create_date = models.DateTimeField(default=datetime.now)
 	content = models.TextField()
 	# answer should be in Message
