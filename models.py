@@ -9,55 +9,127 @@ from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class User(models.Model):
-	# ID is automatically created
+	# ID is automatically generated
 	name = models.CharField(max_length=50)
 	email = models.EmailField()
 	phone = models.CharField(max_length=25, default=None)
 	password = models.CharField()
-	groups = models.ManyToManyField('Group')
 
 class Group(models.Model):
-	# ID is automatically created
+	# ID is automatically generated
 	name = models.CharField(max_length=50)
 	privacy = models.PositiveSmallIntegerField()
 	description = models.TextField(default=None)
 	members = models.ManyToManyField('User')
 
 class Chat(models.Model):
-	# ID is automatically created
-	group_id = models.ForeignKey(
+	# ID is automatically generated
+	group_id = models.OneToOneField (
 		'Group',
-		on_delete=models.CASCADE, # When a group is deleted, delete the chat.
-		)
+		on_delete=models.CASCADE,
+	) # Group has a chat (1..1)
+	important = models.CharField (
+		validators=[validate_comma_seperated_integer_list],
+	) # Holds a list of Message IDs where important = true
+	solved = models.CharField (
+		validators=[validate_comma_seperated_integer_list],
+	) # Holds a list of Message IDs where solved = true
+	unsolved = models.CharField (
+		validators=[validate_comma_seperated_integer_list],
+	) # Holds a list of Message IDs where solved = false
 
 class Message(models.Model):
 	# ID is automatically generated
-	chat_id = models.ForeignKey('Chat')
-	author = models.ForeignKey('User')
+	chat_id = models.ForeignKey (
+		'Chat',
+		on_delete=models.CASCADE,
+	) # Chat has many messages (1..*)
+	author = models.ForeignKey('User') # User has many messages (1..*)
 	create_date = models.DateTimeField(default=datetime.now)
 	content = models.TextField()
 
 	# Pinning system
 	important = models.BooleanField(default=False)
 	solved = models.BooleanField(default=False)
-	replies = models.ManyToManyField('Reply')
-	answer = models.ForeignKey('Reply')
+	replies = models.CharField (
+		validators=[validate_comma_seperated_integer_list],
+	) # Holds a list of Reply IDs where message_id = self
+	answer = models.OneToOneField('Reply')
 
 class Reply(models.Model):
 	# ID is automatically generated
-	message_id = models.ForeignKey('Message')
-	author = models.ForeignKey('User')
+	message_id = models.ForeignKey('Message') # Message has many replies (1..*)
+	author = models.ForeignKey('User') # User has many messages (1..*)
 	create_date = models.DateTimeField(default=datetime.now)
 	content = models.TextField()
-	# answer should be in Message
+	answer = models.BooleanField(default=false)
 
 class Timeline(models.Model):
 	# ID is automatically generated
 
 	# Allow the class to have a generic foreign key
-	timeline_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-	timeline_id = models.PositiveIntegerField()
-	timeline_object = GenericForeignKey('timeline_type', 'timeline_id')
-
+	content_type = models.ForeignKey (
+		ContentType, 
+		on_delete=models.CASCADE,
+		unique=True,
+	)
+	object_id = models.PositiveIntegerField() # ID of owner (User, Group)
+	content_object = GenericForeignKey (
+		'content_type', 
+		'object_id',
+	) # Object that the Timeline is owned by (User, Group)
+	
+	timeline_items = models.CharField (
+		validators=[validate_comma_seperated_integer_list],
+	) # Holds a list of TimelineItem IDs where timeline_id = self
 	start = models.DateTimeField(default=datetime.now)
-	end = models.DateTimeField(default=datetime.now)
+	end = models.DateTimeField(default=datetime.now) # Updated by user action
+
+class TimelineItem(models.Model):
+	# ID is automatically generated
+	timeline_id = models.ForeignKey(
+		'Timeline',
+		on_delete=models.CASCADE,
+	) # Timeline has many timeline items (1..*)
+	item_type = PositiveSmallIntegerField()
+	start = models.DateTimeField()
+	end = models.DateTimeField()
+	title = models.CharField(max_length=50)
+	description = models.TextField(default=None)
+	location = models.CharField()
+	author = models.ForeignKey('User') # User has many timeline items (1..*)
+
+	# Repeat system
+	repeat_frequency = PositiveSmallIntegerField() # 0 = Daily, 1 = Weekly...
+	repeat_end = DateTimeField()
+
+class TimelineItemRepeat(models.Model):
+	# ID is automatically generated
+	timelineitem_id =  models.ForeignKey (
+		'TimelineItem',
+		on_delete=CASCADE,
+	) # TimelineItem has many timeline item repeats (1..*)
+	item_type = PositiveSmallIntegerField()
+	start = models.DateTimeField()
+	end = models.DateTimeField()
+	title = models.CharField(max_length=50)
+	description = models.TextField(default=None)
+	location = models.CharField()
+	author = models.ForeignKey('User') # User has many timeline items (1..*)
+
+class Resource(models.Model):
+	# ID is automatically generated
+	group_id = models.OneToOneField (
+		'Group',
+		on_delete=CASCADE,
+	) # Group has one resource page (1..1)
+
+class ResourceItem(models.Model):
+	# ID is automatically generated
+	resource_id = models.ForeignKey (
+		'Resource',
+		on_delete=CASCADE,
+	) # Resource has many resource items (1..*)
+	link = URLField()
+	added = DateTimeField(default=datetime.now)
+	author = models.ForeignKey('User') # User has many resource items (1..*)
