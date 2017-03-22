@@ -21,7 +21,15 @@ class User(models.Model):
 class Group(models.Model):
 	# ID is automatically generated
 	name = models.CharField(max_length=50)
-	privacy = models.PositiveSmallIntegerField()
+	CLOSED = 0
+	PRIVATE = 1
+	OPEN = 2
+	PRIVACY_TYPES = (
+		(CLOSED, 'Closed'),
+		(PRIVATE, 'Private'),
+		(OPEN, 'Open')
+	)
+	privacy = models.PositiveSmallIntegerField(choices=PRIVACY_TYPES)
 	description = models.TextField(default=None)
 	members = models.ManyToManyField('User')
 
@@ -99,7 +107,15 @@ class TimelineItem(models.Model):
 		'Timeline',
 		on_delete=models.CASCADE,
 	) # Timeline has many timeline items (1..*)
-	item_type = models.PositiveSmallIntegerField()
+	MEETING = 0
+	EVENT = 1
+	ASSIGNMENT = 2
+	ITEM_TYPE_CHOICES = (
+		(MEETING, 'Meeting'),
+		(EVENT, 'Event'),
+		(ASSIGNMENT, 'Assignment'),
+	)
+	item_type = models.PositiveSmallIntegerField(choices=ITEM_TYPE_CHOICES)
 	start = models.DateTimeField()
 	end = models.DateTimeField()
 	title = models.CharField(max_length=50)
@@ -108,7 +124,15 @@ class TimelineItem(models.Model):
 	author = models.ForeignKey('User') # User has many timeline items (1..*)
 
 	# Repeat system
-	repeat_frequency = models.PositiveSmallIntegerField() # 0 = Daily, 1 = Weekly...
+	DAILY = 0
+	WEEKLY = 1
+	MONTHLY = 2
+	FREQUENCY_CHOICES = (
+		(DAILY, 'Daily'),
+		(WEEKLY, 'Weekly'),
+		(MONTHLY, 'Monthly')
+	)
+	repeat_frequency = models.PositiveSmallIntegerField(choices=FREQUENCY_CHOICES)
 	repeat_end = models.DateTimeField()
 
 class TimelineItemRepeat(models.Model):
@@ -117,7 +141,15 @@ class TimelineItemRepeat(models.Model):
 		'TimelineItem',
 		on_delete=models.CASCADE,
 	) # TimelineItem has many timeline item repeats (1..*)
-	item_type = models.PositiveSmallIntegerField()
+	MEETING = 0
+	EVENT = 1
+	ASSIGNMENT = 2
+	ITEM_TYPE_CHOICES = (
+		(MEETING, 'Meeting'),
+		(EVENT, 'Event'),
+		(ASSIGNMENT, 'Assignment'),
+	)
+	item_type = models.PositiveSmallIntegerField(choices=ITEM_TYPE_CHOICES)
 	start = models.DateTimeField()
 	end = models.DateTimeField()
 	title = models.CharField(max_length=50)
