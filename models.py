@@ -16,7 +16,7 @@ class User(models.Model):
 	name = models.CharField(max_length=50)
 	email = models.EmailField()
 	phone = models.CharField(max_length=25, default=None)
-	password = models.CharField(max_length=50)
+	password = models.CharField(max_length=128)
 
 class Group(models.Model):
 	# ID is automatically generated
