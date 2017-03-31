@@ -1,0 +1,29 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'studypal/vendor/semantic/semantic.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'studypal/vendor/semantic/semantic.min.js' %}" />
+
+<div class="ui centered grid container">
+    <div class="nine wide column">
+        <div class="ui fluid card">
+            <div class="content">
+                <form class="ui form" method="POST">
+                    <div class="field">
+                        <label>Username</label>
+                        <input type="text" name="user" placeholder="Enter your username">
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" name="pass" placeholder="Enter your password">
+                    </div>
+                    <button class="ui primary labeled icon button" type="submit">
+                        <i class="unlock alternate icon"></i>Login
+                    </button>
+                </form>
+            </div>
+            <div class="extra content center aligned">
+                <p>Don't have an account? <a href="">Join</a></p>
+            </div>
+        </div>
+    </div>
+</div>

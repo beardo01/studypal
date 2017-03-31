@@ -29,8 +29,8 @@ urlpatterns = [
     url(r'^settings/$', views.settings, name='settings'),
     # Login URL defined as /login/.
     url(r'^login/$', views.login, name='login'),
-    # Signup URL defined as /signup/.
-    url(r'^signup/$', views.signup, name='signup'),
+    # Join URL defined as /signup/.
+    url(r'^join/$', views.join, name='join'),
     # Password reset URL defined as /reset/.
     url(r'^reset/$', views.reset, name='reset'),
     

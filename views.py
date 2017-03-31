@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 # Index page that displays frontend or user home page.
 def index(request):
-    return HttpResponse("Homepage view.")
+    return render(request, 'studypal/index.html')
 
 # Group view that handles particular group page.
 def group(request, group_name):
@@ -29,11 +29,11 @@ def settings(request):
 
 # Login view that handles the login page.
 def login(request):
-    return HttpResponse("Login view.")
+    return render(request, 'studypal/login.html')
 
 # Signup view that handles the signup page.
-def signup(request):
-    return HttpResponse("Signup view.")
+def join(request):
+    return HttpResponse("Join view.")
 
 # Password reset view that handles the password reset page.
 def reset(request):
