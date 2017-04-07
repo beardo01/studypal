@@ -1,1 +1,77 @@
-<h1>Index page</h1>
+{% load static %}
+
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.9/semantic.min.js"></script>
+</head>
+
+<div class="ui bottom attached segment pushable">
+    <div class="ui visible left vertical sidebar menu">
+        <a class="item">
+            <h1>Simpal</h1>
+        </a>
+        <a class="item">
+            <i class="calendar icon"></i> Timeline
+        </a>
+        <a class="item">
+            <i class="users icon"></i> Groups
+        </a>
+        <a class="item">
+            <i class="sign out icon"></i> Logout
+        </a>
+        <a class="center aligned grid">
+            <button class="ui center blue button">Blue</button>
+        </a>
+    </div>
+    <div class="pusher">
+        <div class="ui basic segment">
+            <div class="ui input">
+                <input type="text" placeholder="Search...">
+            </div>
+            <h3 class="ui header">Home Page</h3>
+            <div class="ui cards">
+                <div class="card">
+                    <div class="content">
+                        <img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg">
+                        <div class="header">
+                            Elliot Fu
+                        </div>
+                        <div class="meta">
+                            Friends of Veronika
+                        </div>
+                        <div class="description">
+                            Elliot requested permission to view your contact details
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui two buttons">
+                            <div class="ui basic green button">Approve</div>
+                            <div class="ui basic red button">Decline</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <img class="right floated mini ui image" src="/images/avatar/large/jenny.jpg">
+                        <div class="header">
+                            Jenny Hess
+                        </div>
+                        <div class="meta">
+                            New Member
+                        </div>
+                        <div class="description">
+                            Jenny wants to add you to the group <b>best friends</b>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui two buttons">
+                            <div class="ui basic green button">Approve</div>
+                            <div class="ui basic red button">Decline</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
