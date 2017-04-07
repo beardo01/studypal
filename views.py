@@ -5,11 +5,7 @@ from django.http import HttpResponse
 
 # Index page that displays frontend or user home page.
 def index(request):
-<<<<<<< HEAD
     return render(request,"studypal/index.html")
-=======
-    return render(request, 'studypal/index.html')
->>>>>>> origin/master
 
 # Group view that handles particular group page.
 def group(request, group_name):
